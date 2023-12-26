@@ -21,7 +21,6 @@ class TweetsyRepository @Inject constructor(
             val response = tweetsyApi.getCategories()
             if (response.isSuccessful && response.body() != null) {
                 _categories.emit(response.body()!!)
-                Log.d("TRxy", "24")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -29,9 +28,13 @@ class TweetsyRepository @Inject constructor(
     }
 
     suspend fun getTweets(category: String) {
-        val response = tweetsyApi.getTweets("tweets[?(@.category==\"$category\")]")
-        if (response.isSuccessful && response.body() != null) {
-            _tweets.emit(response.body()!!)
+        try {
+            val response = tweetsyApi.getTweets("tweets[?(@.category==\"$category\")]")
+            if (response.isSuccessful && response.body() != null) {
+                _tweets.emit(response.body()!!)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }
